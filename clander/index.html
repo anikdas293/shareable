@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" id="init">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Clander</title>
+	<style>
+	.clander{
+		width:30%;
+		margin:auto;
+	}
+	.month {
+    padding: 3rem 2.5rem;
+    width: 80%;
+    background: #1abc9c;
+    text-align: center;
+  }
+  
+  .month ul {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .month ul li {
+	list-style-type:none;
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  
+  .month #prev {
+    float: left;
+    padding-top: 10px;
+  }
+  
+  .month #next {
+    float: right;
+    padding-top: 10px;
+  }
+  
+.weekdays{
+    margin:0;padding:1rem 0;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content: space-around;
+    background:#ddd;
+}
+.weekdays li {
+    list-style-type:none;
+    color:#777;
+}
+.days{
+    padding: 10px 0;margin: 0;
+    background: #eee;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+
+    flex-wrap:wrap;
+}
+.days li {
+    text-align:center;
+    list-style-type: none;
+    width: 14.285%;
+    margin-bottom: 5px;
+    font-size:12px;
+    color: #777;
+}
+.days li:first-child{
+    display:none;
+}
+.days .active {
+    padding:.5rem 0;
+    background: #1abc9c;
+    border-radius:2rem;
+    color: white !important
+}
+  
+  /* Add media queries for smaller screens */
+  @media screen and (max-width:720px) {
+    .weekdays li, .days li {width: 13.1%;}
+  }
+  
+  @media screen and (max-width: 420px) {
+    .weekdays li, .days li {width: 12.5%;}
+    .days li .active {padding: 2px;}
+  }
+  
+  @media screen and (max-width: 290px) {
+    .weekdays li, .days li {width: 12.2%;}
+  }
+
+	</style>
+</head>
+<body>
+
+<div class="clander">
+	<div class="month">      
+		<ul>
+		  <li id="prev">&#10094;</li>
+		  <li id="next">&#10095;</li>
+		  <li>
+			  <span id="intext_month"></span><br>
+			<span style="font-size:18px" id="intext_year"></span>
+		  </li>
+		</ul>
+	</div>
+	  
+	  <ul class="weekdays">
+		<li>Sa</li>
+		<li>Su</li>
+		<li>Mo</li>
+		<li>Tu</li>
+		<li>Wh</li>
+		<li>Th</li>
+		<li>Fi</li>
+	  </ul>
+	  
+	  <ul class="days">  
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+		<li></li>
+	  </ul>
+</div>
+
+<script>
+/*  Area/class/tag selector */
+var i, p, q ;
+var x = document.querySelectorAll(".clander .days li");
+
+/* find today's date */
+var fun_of_date = new Date();
+var info = fun_of_date.getMonth();
+document.getElementById("prev").addEventListener("click", changedate);
+function changedate(){
+	fun_of_date.setMonth(info+1);
+}
+//fun_of_date.setFullYear(2020, 6, 10);
+var date = fun_of_date.getDate();
+
+/* Find year and month*/
+var month = ["january", "Febuary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+document.getElementById("intext_month").innerHTML = month[fun_of_date.getMonth()];
+document.getElementById("intext_year").innerHTML = fun_of_date.getFullYear();
+
+/* find the difference between 1 to this_mothth_first_day */
+var set_date = new Date();
+//set_date.setFullYear(2020, 6, 10);
+set_date.setDate(1);
+q = set_date.getDay()+1;
+
+/* for loop arrange the month */
+for(i=1; i<=31; i++){
+	if(q == 7){
+		x[i].innerHTML= i;
+	}else{
+		x[i+q].innerHTML= i;
+	}
+	
+}
+
+/* today style */
+if(q == 7){
+	x[date].className = "active";
+}else{
+	x[date+q].className = "active";
+}
+</script>
+</body>
+</html>
