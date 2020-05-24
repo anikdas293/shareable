@@ -1,0 +1,190 @@
+<script src="js/custon_selector.js"></script>
+<script src="js/Chart.min.js"></script>
+<script src="js/utils.js"></script>
+<script>
+//background color
+function backColor(colorArray, colorName, colorLimit){
+    if(colorArray == 'true'){
+        var mkArray = [];
+        for(var i=0; i<colorLimit; i++){
+            mkArray.push(Color(window.chartColors[colorName[i]]).alpha([colorOpacity[0]]).rgbString(),)
+        }
+        return mkArray;
+    }else{
+        return Color(window.chartColors[colorName[0]]).alpha([colorOpacity[0]]).rgbString();
+    }
+};
+//borderand and point color
+function borderColor(colorArray, colorName, colorLimit){
+    if(colorArray == 'true'){
+        var mkArray = [];
+        for(var i=0; i<colorLimit; i++){
+            mkArray.push(window.chartColors[colorName[i]],)
+        }
+        return mkArray;
+    }else{
+        return window.chartColors[colorName[0]];
+    }
+};
+//draw Chart
+function createConfig(type, labels, labTitle, colorArray, colorName, colorLimit, colorOpacity, chartData, fill, legend, scTitle, scTitleX, scTitleY) {
+    return {
+        type: type,
+        data: {
+            labels: labels,
+            datasets: [{
+                label: labTitle[0],
+                borderColor: borderColor(colorArray, colorName, colorLimit),
+                backgroundColor: backColor(colorArray, colorName, colorLimit),
+                data: chartData,
+                fill: fill[0],
+                pointStyle: 'circle',
+                pointRadius: 4,
+                pointBorderColor: window.chartColors[colorName[0]],
+                pointBackgroundColor: window.chartColors[colorName[0]]
+            }]
+        },
+        options: {
+            responsive: true,
+            legend : {
+                display: legend,
+                labels: {
+                    usePointStyle: true
+                }
+            },
+            title: {
+                display: scTitle[0],
+                text: scTitle[1]
+            },
+            tooltips: {
+                display: true,
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                xAxes: [{
+                    display: scTitleX[0],
+                    scaleLabel: {
+                        display: true,
+                        labelString: scTitleX[1]
+                    }
+                }],
+                yAxes: [{
+                    display: scTitleY[0],
+                    scaleLabel: {
+                        display: true,
+                        labelString: scTitleY[1]
+                    }
+                }]
+            }
+        }
+    };
+};
+
+//Draw line or bar
+function drawChart(types) {
+    switch(types) {
+        case 'line':
+            type = 'line';
+            scTitleX = [true, 'X Axis'];
+            scTitleY = [true, 'Y Axis'];
+            colorArray = ['false'];
+            colorName = ['red'];
+            colorLimit = 1;
+        break;
+        case 'bar':
+            type = 'bar';
+            scTitleX = [true, 'X Axis'];
+            scTitleY = [true, 'Y Axis'];
+            colorArray = ['false'];
+            colorName = ['red'];
+            colorLimit = 1;
+        break;
+        case 'pie':
+            type = 'pie';
+            scTitleX = [false, ''];
+            scTitleY = [false, ''];
+            colorArray = ['true'];
+            colorName = ['red', 'green', 'orange','blue', 'red', 'orange', 'green'];
+            colorLimit = 7;
+        break;
+        case 'doughnut':
+            type = 'doughnut';
+            scTitleX = [false, ''];
+            scTitleY = [false, ''];
+            colorArray = ['true'];
+            colorName = ['red', 'green', 'orange','blue', 'red', 'orange', 'green'];
+            colorLimit = 7;
+        break;
+        default:
+            type = 'line';
+            scTitleX = [true, 'X Axis'];
+            scTitleY = [true, 'Y Axis'];
+    }
+
+    labels= ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'];
+    labTitle = ['Dashed', 'Filled'];
+    colorOpacity = ['0.8'];
+    chartData = [10,8,20,16,30,24,40,32,50,40,60,48,70,56,80,64,90,72,100];
+    fill = [false];
+
+    legend = true;
+    scTitle = [true, 'this is top title'];
+    
+    var canvas = document.getElementById('canvas')
+    const ctx = canvas.getContext('2d');
+    var config = createConfig(type, labels, labTitle, colorArray, colorName, colorLimit, colorOpacity, chartData, fill, legend, scTitle, scTitleX, scTitleY);
+    new Chart(ctx, config);
+}
+
+function lineDraw() {   
+    var canvas=document.getElementById("canvas");
+    var context=canvas.getContext("2d");
+    context.clearRect(0, 0, context.width,context.height);
+    context.beginPath();
+    context.canvas.width = context.canvas.width;
+    context.moveTo(0,0);
+    context.lineTo(event.clientX,event.clientY);
+    context.stroke();
+}
+</script>
+
+
+
+
+<script>
+var i, selBox, selItems, chartData;
+selBox = document.getElementsByClassName('select__box');
+selItems = document.getElementsByClassName('select__box-select');
+
+//collect data
+chartPage = selItems[0].value;
+chartType = selItems[1].value;
+charViews = selItems[2].value;
+
+
+for(i = 0; i < selBox.length; i++){
+    selBox[i].addEventListener("click", function(){
+        chartPage = selItems[0].value;
+        chartType = selItems[1].value;
+        charViews = selItems[2].value;
+        window.onload = lineDraw();
+        window.onload = load();
+    });
+}
+
+function load(){
+	xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+            //context.clearRect(0, 0, canvas.width, canvas.height);
+            drawChart(this.responseText);
+		}
+	}
+	xhttp.open("GET", "on_page.php?chartPage="+chartPage+"&chartType="+chartType+"&charViews="+charViews, true);
+	xhttp.send();
+}
+//window.onload = load();
+//context.beginPath();
+
+</script>
